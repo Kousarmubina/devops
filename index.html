@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration form</title>
+    <style>
+        body {
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .main {
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            background: rgb(2, 0, 36);
+            background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 43, 121, 1) 0%, rgba(0, 212, 255, 1) 100%);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .batch {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .content {
+            display: flex;
+            padding: 20px;
+            margin: 10px;
+            justify-content: space-between;
+        }
+
+        .modal {
+            background-color: #fff;
+            width: 600px;
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 10px;
+        }
+
+        .header {
+            padding: 5px;
+        }
+
+        .footer {
+            padding: 20px;
+        }
+
+        .radio-btns {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .content input {
+            height: 40px;
+            width: 250px;
+            border-radius: 7px;
+            border: none;
+            background-color: #e9e5e5;
+            margin-bottom: 10px;
+            outline: none;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        .btn {
+            width: 100%;
+            height: 40px;
+            border-radius: 10px;
+            font-size: 18px;
+            background: rgb(2, 0, 36);
+            background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 43, 121, 1) 0%, rgba(0, 212, 255, 1) 100%);
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+
+        #head {
+            text-decoration: underline rgba(0, 212, 255, 1);
+        }
+
+        .error {
+            color: red;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="main">
+        <form class="modal" id="registrationForm">
+            <div class="header">
+                <h1><span id="head">Reg</span>istration</h1>
+            </div>
+            <div class="content">
+                <div class="batch">
+                    <label>Full Name</label>
+                    <input type="text" id="fullName" placeholder="Enter your fullname">
+                    <span id="fullNameError" class="error"></span>
+
+                    <label>Email</label>
+                    <input type="email" id="email" placeholder="Enter your email">
+                    <span id="emailError" class="error"></span>
+
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="Enter your password">
+                    <span id="passwordError" class="error"></span>
+                </div>
+                <div class="batch">
+                    <label>User Name</label>
+                    <input type="text" id="useName" placeholder="Enter your username">
+                    <span id="userNameError" class="error"></span>
+
+                    <label>Phone Number</label>
+                    <input type="text" id="phoneNumber" placeholder="Enter your phone number">
+                    <span id="phoneNumberError" class="error"></span>
+
+                    <label>Confirm Password</label>
+                    <input type="password" id="confirmPassword" placeholder="Re-enter your password">
+                    <span id="confirmPasswordError" class="error"></span>
+                </div>
+            </div>
+            <div class="footer">
+                <label>Gender</label>
+                <div class="radio-btns">
+                    <div><input type="radio" name="gender" id="male" value="Male">Male </div>
+                    <div><input type="radio" name="gender" id="female" value="Female">Female </div>
+                    <div><input type="radio" name="gender" id="others" value="Prefer not to say">Prefer not to say
+                    </div>
+                </div> <br>
+                <span id="genderError" class="error"></span><br>
+                <button type="submit" class="btn">Register</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Validation function
+        function validateForm(e) {
+            e.preventDefault();
+
+            // Clear previous errors
+            document.querySelectorAll('.error').forEach(span => span.textContent = '');
+
+            let fullName = document.getElementById("fullName").value.trim();
+            let userName = document.getElementById("useName").value.trim();
+            let email = document.getElementById("email").value.trim();
+            let phoneNumber = document.getElementById("phoneNumber").value.trim();
+            let password = document.getElementById("password").value;
+            let confirmPassword = document.getElementById("confirmPassword").value;
+
+            let gender = document.querySelector('input[name="gender"]:checked') ?
+                document.querySelector('input[name="gender"]:checked').value : null;
+
+            let isValid = true;
+
+            // Validation checks
+            if (!fullName) {
+                document.getElementById("fullNameError").textContent = "Please enter a valid full name";
+                isValid = false;
+            }
+
+            if (!email || !/\S+@\S+\.\S+/.test(email)) {
+                document.getElementById("emailError").textContent = "Please enter a valid email.";
+                isValid = false;
+            }
+
+            if (!userName) {
+                document.getElementById("userNameError").textContent = "Username cannot be empty.";
+                isValid = false;
+            }
+
+            if (!phoneNumber || !/^\d{10}$/.test(phoneNumber)) {
+                document.getElementById("phoneNumberError").textContent = "Please enter a valid phone number (10 digits).";
+                isValid = false;
+            }
+
+            if (!password || password.length < 6) {
+                document.getElementById("passwordError").textContent = "Password must be at least 6 characters long.";
+                isValid = false;
+            }
+
+            if (password !== confirmPassword) {
+                document.getElementById("confirmPasswordError").textContent = "Passwords do not match.";
+                isValid = false;
+            }
+
+            if (!gender) {
+                document.getElementById("genderError").textContent = "Please select your gender.";
+                isValid = false;
+            }
+
+            // If everything is valid, show the registration details
+            if (isValid) {
+                alert(`Full Name: ${fullName}\nUser Name: ${userName}\nEmail: ${email}\nPhone: ${phoneNumber}\nGender: ${gender}`);
+            }
+
+            return isValid;
+        }
+
+        document.getElementById('registrationForm').addEventListener('submit', validateForm);
+    </script>
+
+</body>
+
+</html>
